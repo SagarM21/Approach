@@ -27,8 +27,8 @@ const SidebarChatList: FC<SidebarChatListProps> = ({ friends, sessionId }) => {
 		pusherClient.subscribe(toPusherKey(`user:${sessionId}:chats`));
 		pusherClient.subscribe(toPusherKey(`user:${sessionId}:friends`));
 
-		const newFriendHandler = () => {
-			router.refresh();
+		const newFriendHandler = (newFriend: User) => {
+			setActiveChats((prev) => [...prev, newFriend]);
 		};
 
 		const chatHandler = (message: ExtendedMessage) => {
