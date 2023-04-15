@@ -24,6 +24,47 @@ const SidebarChatList: FC<SidebarChatListProps> = ({ friends, sessionId }) => {
 	const [activeChats, setActiveChats] = useState<User[]>(friends);
 
 	useEffect(() => {
+		pusherClient.subscribe(toPusherKey(`user:${sessionId}:chats`));
+		pusherClient.subscribe(toPusherKey(`user:${sessionId}:friends`));
+
+		const newFriendHandler = () => {
+			router.refresh();
+		};
+
+		const chatHandler = (message: ExtendedMessage) => {
+			console.log("new chat msg");
+			const shouldNotify =
+				pathname !==
+				`/dashboard/chat/${chatHrefConstructor(sessionId, message.senderId)}`;
+
+			if (!shouldNotify) {
+				return;
+			}
+			// custom component
+			toast.custom((t) => (
+				<UnseenChatToast
+					t={t}
+					sessionId={sessionId}
+					senderId={message.senderId}
+					senderImg={message.senderImg}
+					senderMessage={message.text}
+					senderName={message.senderName}
+				/>
+			));
+
+			setUnseenMessages((prev) => [...prev, message]);
+		};
+
+		pusherClient.bind("new_message", chatHandler);
+		pusherClient.bind("new_friend", newFriendHandler);
+		return () => {
+			pusherClient.unsubscribe(toPusherKey(`user:${sessionId}:chats`));
+
+			pusherClient.unsubscribe(toPusherKey(`user:${sessionId}:friends`));
+		};
+	}, [pathname, sessionId, router]);
+
+	useEffect(() => {
 		if (pathname?.includes("chat")) {
 			setUnseenMessages((prev) => {
 				return prev.filter((msg) => !pathname.includes(msg.senderId));
