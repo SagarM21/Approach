@@ -17,7 +17,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Features
 - Google Auth using NextAuth
-- RTC using upstash-redis
+- RTC using upstash-redis and used pusher to subsribe and trigger the events.
 - Add friend
 - Approve/deny friend request
 - Minimilistic UI, easy to use
