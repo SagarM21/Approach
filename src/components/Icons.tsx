@@ -19,6 +19,7 @@ export const Icons = {
 			height={250}
 		/>
 	),
+	UserPlus,
 };
 
 export type Icon = keyof typeof Icons;
