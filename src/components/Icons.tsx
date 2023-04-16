@@ -1,4 +1,5 @@
 import { LucideProps, UserPlus } from "lucide-react";
+import Image from "next/image";
 
 export const Icons = {
 	Logo: (props: LucideProps) => (
@@ -9,7 +10,15 @@ export const Icons = {
 			/>
 		</svg>
 	),
-	UserPlus,
+	MainLogo: (
+		<Image
+			src='/logo.png'
+			alt='logo'
+			referrerPolicy='no-referrer'
+			width={250}
+			height={250}
+		/>
+	),
 };
 
 export type Icon = keyof typeof Icons;
